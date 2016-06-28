@@ -4,19 +4,16 @@ require 'pry'
 # Reads from and writes to standard I/O.
 class ContactList
 
-  # TODO: Implement user interaction. This should be the only file where you
-  # use `puts` and `gets`.
-  # step 1: display menu
-  puts "Here is a list of available commands:"
-  puts "     new    - Create a new contact"
-  puts "     list   - List all contacts"
-  puts "     show   - Show a contact"
-  puts "     search - Search contacts"
-  command_selected = gets.chomp.downcase
+  def create_new_contact
+    puts "Please enter contact name"
+    name = gets.chomp
+    puts "Please enter email"
+    email = gets.chomp
+    a_contact = Contact.create(name,email)
+    puts "#{a_contact.name} has been added to your contacts with email #{a_contact.email} and id: #{a_contact.id}"
+  end
 
-
-
-  if command_selected == 'list'
+  def list_all_contacts
     ctr = 0
     Contact.all.each { |person|
       puts "#{person.id}: #{person.name} (#{person.email})"
@@ -26,24 +23,14 @@ class ContactList
     puts "#{ctr} records total"
   end
 
-  if command_selected == 'new'
-    #retest for puts
-    puts "Please enter contact name"
-    name = gets.chomp
-    puts "Please enter email"
-    email = gets.chomp
-    a_contact = Contact.create(name,email)
-    puts "#{a_contact.name} has been added to your contacts with email #{a_contact.email} and id: #{a_contact.id}"
-  end
-
-  if command_selected == 'show'
+  def show_selected_contact
     puts "Please enter id"
     id = gets.chomp
     a_contact = Contact.find(id)
     puts "ID # #{a_contact.id}: belongs to #{a_contact.name} email (#{a_contact.email})"
   end
 
-  if command_selected == 'search'
+  def search_for_contact
     puts "Please enter search criteria: name or email."
     search_key = gets.chomp
     ctr = 0
@@ -54,6 +41,25 @@ class ContactList
 
     puts '---'
     puts "#{ctr} records total"
-
   end
+
+end
+
+puts "Here is a list of available commands:"
+puts "     new    - Create a new contact"
+puts "     list   - List all contacts"
+puts "     show   - Show a contact"
+puts "     search - Search contacts"
+command_selected = gets.chomp.downcase
+
+x = ContactList.new()
+case command_selected
+  when 'new'
+    x.create_new_contact
+  when 'list'
+    x.list_all_contacts
+  when 'show'
+    x.show_selected_contact
+  when 'search'
+    x.search_for_contact
 end
